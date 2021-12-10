@@ -18,18 +18,19 @@ import java.util.jar.JarFile;
 import zombie.debug.DebugLog;
 
 
-public class JavaModParser {
+public class JavaModLoader {
 
 	private final static String javaModManifest = "javamods.txt";
 
 	private static HashSet<String> loadedMods = new HashSet<>();
 
-	private static List<JavaMod> parseJavaMod(JarFile jarFile) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
+	private static List<JavaMod> loadJavaMod(JarFile jarFile) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
 		String line;
 		List<JavaMod> javaMods = new ArrayList<>();
 		List<String> classList = new ArrayList<>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarFile.getEntry(javaModManifest))));
 
+		DebugLog.Lua.warn("JavaMods: Checking JAR file " + jarFile.getName());
 		while ((line = reader.readLine()) != null) {
 			line = line.strip();
 			if (!line.equals(""))
@@ -57,6 +58,7 @@ public class JavaModParser {
 				continue;
 			}
 
+			DebugLog.Lua.warn("JavaMods: Loading JavaMod " + jarFile.getName());
 			javaMods.add(classs.getDeclaredConstructor().newInstance());
 			loadedMods.add(className);
 		}
@@ -64,14 +66,16 @@ public class JavaModParser {
 		return javaMods;
 	}
 
-	public static List<JavaMod> parseJavaMods(File directory) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
+	public static List<JavaMod> loadJavaMods(File directory) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
 
 		ArrayList<JavaMod> javaMods = new ArrayList<>();
 
+		DebugLog.Lua.warn("JavaMod: Loading JavaMods from " + directory.getAbsolutePath());
 		for (String fileName : directory.list())
 			if (fileName.toLowerCase().endsWith(".jar"))
-				javaMods.addAll(parseJavaMod(new JarFile(new File(directory, fileName))));
+				javaMods.addAll(loadJavaMod(new JarFile(new File(directory, fileName))));
 
+		//JavaMod mod = javaMods.get(0);
 		return javaMods;
 	}
 }

@@ -1,5 +1,4 @@
-NAME          := JavaMods
-SCRIPTNAME    := javamods
+NAME          := javamods
 
 BUILD         := build
 BUILDLINUX    := $(BUILD)/linux
@@ -7,14 +6,14 @@ BUILDMACOSX   := $(BUILD)/macosx
 BUILDWINDOWS  := $(BUILD)/windows
 
 BUNDLE        := dist
-BUNDLELINUX   := $(BUNDLE)/$(SCRIPTNAME)-linux.zip
-BUNDLEMACOSX  := $(BUNDLE)/$(SCRIPTNAME)-macosx.zip
-BUNDLEWINDOWS := $(BUNDLE)/$(SCRIPTNAME)-windows.zip
+BUNDLELINUX   := $(BUNDLE)/$(NAME)-linux.zip
+BUNDLEMACOSX  := $(BUNDLE)/$(NAME)-macosx.zip
+BUNDLEWINDOWS := $(BUNDLE)/$(NAME)-windows.zip
 
 JARFILE       := src/$(NAME).jar
-SCRIPTLINUX   := scripts/$(SCRIPTNAME)-linux.sh
-SCRIPTMACOSX  := scripts/$(SCRIPTNAME)-macosx.sh
-SCRIPTWINDOWS := scripts/$(SCRIPTNAME)-windows.bat
+SCRIPTLINUX   := scripts/$(NAME)-linux.sh
+SCRIPTMACOSX  := scripts/$(NAME)-macosx.sh
+SCRIPTWINDOWS := scripts/$(NAME)-windows.bat
 
 all: bundle
 
@@ -58,7 +57,7 @@ clean: cleansrc
 cleansrc:
 	$(MAKE) -C src clean
 
-install: build
+install: bundle
 	./scripts/install-linux.sh
 
 uninstall:

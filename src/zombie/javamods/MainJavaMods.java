@@ -23,10 +23,25 @@ public class MainJavaMods implements Runnable {
 		new Thread(this).start();
 	}
 
+	private void exposeJavaMods(File javaModsDir) throws Exception {
+
+		Field managerField = LuaManager.class.getDeclaredField("converterManager");
+		KahluaConverterManager manager = (KahluaConverterManager)managerField.get(null);
+
+		Field platformField = LuaManager.class.getDeclaredField("platform");
+		Platform platform = (Platform)platformField.get(null);
+
+		Field envField = LuaManager.class.getDeclaredField("env");
+		KahluaTable env = (KahluaTable)envField.get(null);
+
+		JavaModExposer exposer = JavaModExposer.getInstance(manager, platform, env);
+		exposer.exposeJavaMods(JavaModLoader.loadJavaMods(javaModsDir));
+	}
+
 	private boolean isLuaManagerReady() throws IllegalAccessException, NoSuchFieldException {
 		Field envField = LuaManager.class.getDeclaredField("env");
 		KahluaTable env = (KahluaTable)envField.get(null);
-		return env.rawget("Calendar") != null;
+		return env != null && env.rawget("Calendar") != null;
 	}
 
 	private void waitLuaManagerReady() throws IllegalAccessException, NoSuchFieldException {
@@ -57,8 +72,7 @@ public class MainJavaMods implements Runnable {
 			javaModsDir.mkdirs();
 
 		try {
-			JavaModExposer exposer = JavaModExposer.getInstance();
-			exposer.exposeJavaMods(JavaModParser.parseJavaMods(javaModsDir));
+			exposeJavaMods(javaModsDir);
 		}
 		catch (Exception error) {
 			error.printStackTrace();
