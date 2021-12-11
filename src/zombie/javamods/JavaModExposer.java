@@ -8,8 +8,6 @@ import se.krka.kahlua.integration.expose.LuaJavaClassExposer;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
-import zombie.debug.DebugLog;
-
 
 public class JavaModExposer extends LuaJavaClassExposer {
 
@@ -26,12 +24,12 @@ public class JavaModExposer extends LuaJavaClassExposer {
 
 		for (JavaMod javaMod : javaMods) {
 
-			DebugLog.Lua.println("JavaMods: Exposing JavaMod: " + javaMod);
+			Log.info("JavaMods: Exposing JavaMod: " + javaMod);
 
 			List<Class<?>> exposedClasses = javaMod.getExposedClasses();
 			if (exposedClasses != null)
 				for (Class<?> classs : exposedClasses) {
-					DebugLog.Lua.println("JavaMods: Exposing class " + classs);
+					Log.info("JavaMods: Exposing class " + classs);
 					exposed.add(classs);
 					exposeLikeJavaRecursively(classs, env);
 				}

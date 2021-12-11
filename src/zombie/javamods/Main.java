@@ -13,11 +13,11 @@ import se.krka.kahlua.j2se.J2SEPlatform;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
-import zombie.gameStates.MainScreenState;
-import zombie.Lua.LuaManager;
-
 
 public class Main implements Runnable {
+
+	private final static Class<?> zomboidMainClass = Core.getZomboidMainClass();
+	private final static Class<?> zomboidLuaManagerClass = Core.getZomboidLuaManagerClass();
 
 	private Main() {
 		new Thread(this).start();
@@ -26,7 +26,7 @@ public class Main implements Runnable {
 	private boolean isLuaManagerReady() {
 
 		try {
-			Field envField = LuaManager.class.getDeclaredField("env");
+			Field envField = zomboidLuaManagerClass.getDeclaredField("env");
 			KahluaTable env = (KahluaTable)envField.get(null);
 			return env != null && env.rawget("Calendar") != null;
 		}
@@ -51,14 +51,16 @@ public class Main implements Runnable {
 
 		waitLuaManagerReady();
 
+		Core.initDebug();
+
 		try {
-			Field managerField = LuaManager.class.getDeclaredField("converterManager");
+			Field managerField = zomboidLuaManagerClass.getDeclaredField("converterManager");
 			KahluaConverterManager manager = (KahluaConverterManager)managerField.get(null);
 
-			Field platformField = LuaManager.class.getDeclaredField("platform");
+			Field platformField = zomboidLuaManagerClass.getDeclaredField("platform");
 			Platform platform = (Platform)platformField.get(null);
 
-			Field envField = LuaManager.class.getDeclaredField("env");
+			Field envField = zomboidLuaManagerClass.getDeclaredField("env");
 			KahluaTable env = (KahluaTable)envField.get(null);
 
 			JavaModExposer exposer = new JavaModExposer(manager, platform, env);
@@ -82,7 +84,7 @@ public class Main implements Runnable {
 	private static void startZomboid(String[] args) {
 		try {
 			final Object[] arg = new Object[]{ args };
-			MainScreenState.class.getDeclaredMethod("main", String[].class).invoke(null, arg);
+			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
 		}
 		catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException error) {
 			error.printStackTrace();

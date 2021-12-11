@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.jar.JarFile;
 
-import zombie.debug.DebugLog;
-
 
 public class JavaModLoader {
 
@@ -30,7 +28,7 @@ public class JavaModLoader {
 		List<String> classList = new ArrayList<>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarFile.getEntry(javaModManifest))));
 
-		DebugLog.Lua.warn("JavaMods: Loading mods from " + jarFile.getName());
+		Log.warn("JavaMods: Loading mods from " + jarFile.getName());
 		while ((line = reader.readLine()) != null) {
 			line = line.strip();
 			if (!line.equals(""))
@@ -40,7 +38,7 @@ public class JavaModLoader {
 		reader.close();
 
 		if (classList.isEmpty()) {
-			DebugLog.Lua.warn("JavaMods: No class found in " + javaModManifest);
+			Log.warn("JavaMods: No class found in " + javaModManifest);
 			return javaMods;
 		}
 
@@ -49,16 +47,16 @@ public class JavaModLoader {
 			Class<? extends JavaMod> classs = Class.forName(className).asSubclass(JavaMod.class);
 
 			if (!JavaMod.class.isAssignableFrom(classs)) {
-				DebugLog.Lua.warn("JavaMods: Class " + className + " is not a JavaMod, skipping.");
+				Log.warn("JavaMods: Class " + className + " is not a JavaMod, skipping.");
 				continue;
 			}
 
 			if (loadedMods.contains(className)) {
-				DebugLog.Lua.warn("JavaMods: Found duplicate class " + className + ", skipping.");
+				Log.warn("JavaMods: Found duplicate class " + className + ", skipping.");
 				continue;
 			}
 
-			DebugLog.Lua.println("JavaMods: Loading JavaMod " + jarFile.getName());
+			Log.info("JavaMods: Loading JavaMod " + jarFile.getName());
 			javaMods.add(classs.getDeclaredConstructor().newInstance());
 			loadedMods.add(className);
 		}
