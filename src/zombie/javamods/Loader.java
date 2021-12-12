@@ -21,6 +21,7 @@ public class Loader {
 
 	private final static String javaModManifest = "javamods.txt";
 
+	private static List<JavaMod> javaMods;
 	private static HashSet<String> jarFiles = new HashSet<>();
 	private static HashSet<String> loadedMods = new HashSet<>();
 
@@ -141,6 +142,9 @@ public class Loader {
 
 	private static List<JavaMod> loadJavaMods(boolean bootstrap) {
 
+		if (Loader.javaMods != null)
+			return Loader.javaMods;
+
 		List<JavaMod> newJavaMods;
 		List<JavaMod> javaMods = new ArrayList<>();
 
@@ -161,6 +165,7 @@ public class Loader {
 					}
 				}
 
+		Loader.javaMods = javaMods;
 		return javaMods;
 	}
 

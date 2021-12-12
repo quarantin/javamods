@@ -22,9 +22,10 @@ public class Exposer extends LuaJavaClassExposer {
 		this.exposed = new ArrayList<>();
 	}
 
-	public void exposeJavaMods(List<JavaMod> javaMods) {
+	public void exposeJavaMods() {
 
-		for (JavaMod javaMod : javaMods) {
+		Log.info("Exposing java mods...");
+		for (JavaMod javaMod : Loader.loadJavaMods()) {
 
 			Log.info("Loading java mod " + javaMod.getClass().getName() + " [" + javaMod.getJarPath() + "]");
 
