@@ -74,6 +74,11 @@ public class Filesystem {
 		return steamWorkshopDir;
 	}
 
+	public static File getSteamModDir() {
+		File modsDir = new File(getSteamInstallDir(), "steamapps" + File.separator + "workshop" + File.separator + "content" + File.separator + "108600");
+		return modsDir;
+	}
+
 	public static File getUserProfileDir() {
 
 		if (userProfileDir != null)
@@ -159,6 +164,7 @@ public class Filesystem {
 			getUserProfilesWorkshopDir(),
 			getUserProfileModDir(),
 			getSteamWorkshopDir(),
+			getSteamModDir(),
 		};
 	}
 
