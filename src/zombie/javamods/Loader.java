@@ -66,6 +66,11 @@ public class Loader {
 			Log.error(error);
 			return null;
 		}
+		catch (NoClassDefFoundError error) {
+			Log.error("Class definition not found for class imported from " + className + ", skipping.");
+			Log.error(error);
+			return null;
+		}
 
 		if (!JavaMod.class.isAssignableFrom(classs)) {
 			Log.warn("Class " + className + " is not a JavaMod, skipping.");
