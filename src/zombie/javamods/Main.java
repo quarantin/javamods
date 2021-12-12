@@ -44,7 +44,7 @@ public class Main implements Runnable {
 
 		try {
 			final Object[] arg = new Object[]{ new String[] {} };
-			Class<?> zomboidMainClass = Core.getZomboidMainClass();
+			Class<?> zomboidMainClass = Core.getZomboidClientMainClass();
 			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
 		}
 		catch (Exception error) {
@@ -56,7 +56,7 @@ public class Main implements Runnable {
 
 		try {
 			final Object[] arg = new Object[]{ new String[] { "-statistic" }};
-			Class<?> zomboidMainClass = Core.getZomboidMainClass();
+			Class<?> zomboidMainClass = Core.getZomboidServerMainClass();
 			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
 		}
 		catch (Exception error) {

@@ -9,6 +9,7 @@ import se.krka.kahlua.vm.KahluaTable;
 
 import zombie.Lua.LuaManager;
 import zombie.gameStates.MainScreenState;
+import zombie.network.GameServer;
 
 
 public class Core {
@@ -17,8 +18,12 @@ public class Core {
 	public static boolean server;
 	private static KahluaTable env;
 
-	public static Class<?> getZomboidMainClass() {
+	public static Class<?> getZomboidClientMainClass() {
 		return MainScreenState.class;
+	}
+
+	public static Class<?> getZomboidServerMainClass() {
+		return GameServer.class;
 	}
 
 	private static boolean isLuaManagerReady() {
