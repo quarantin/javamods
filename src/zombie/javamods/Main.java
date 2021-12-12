@@ -6,6 +6,7 @@ import java.io.IOException;
 public class Main implements Runnable {
 
 	private final static String debugArg     = "-debug";
+	private final static String serverArg    = "-server";
 	private final static String bootstrapArg = "-bootstrap";
 
 	private Main(String[] args) throws IOException {
@@ -21,12 +22,14 @@ public class Main implements Runnable {
 			else if (arg.equals(debugArg))
 				Core.debug =  true;
 
+			else if (arg.equals(serverArg))
+				Core.server = true;
+
 		}
 
 		Log.init();
 		Log.info("Starting JavaMods");
 		Log.info("Running with debug mode = " + Core.debug);
-
 
 		new Thread(this).start();
 	}
@@ -49,9 +52,27 @@ public class Main implements Runnable {
 		}
 	}
 
+	private static void startZomboidServer() {
+
+		try {
+			final Object[] arg = new Object[]{ new String[] { "-statistic" }};
+			Class<?> zomboidMainClass = Core.getZomboidMainClass();
+			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
+		}
+		catch (Exception error) {
+			Log.error(error);
+		}
+	}
+
 	public static void main(String[] args) throws IOException {
+
 		new Main(args);
-		startZomboid();
+
+		if (Core.server)
+			startZomboidServer();
+		else
+			startZomboid();
+
 		Log.exit();
 	}
 }
