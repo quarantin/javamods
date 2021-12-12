@@ -19,11 +19,11 @@ fi
 echo "${ARCH}-bit java detected"
 JAVA="${JAVAROOT}/bin/java"
 MAIN="zombie.javamods.Main"
-CLASSPATH=".:./*:./javamods/*"
+CLASSPATH=".:./*:$("${JAVA}" -classpath javamods.jar ${MAIN} -bootstrap)"
 LD_PRELOAD="${LD_PRELOAD}:${JAVAROOT}/lib/libjsig.so"
 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:../natives/linux${ARCH}:../natives:./linux${ARCH}"
 XMODIFIERS= LD_PRELOAD="${LD_PRELOAD}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
 	"${INSTDIR}/ProjectZomboid${ARCH}"                      \
-	-pzexejavacmd "${JAVA} -classpath ${CLASSPATH} ${MAIN}" \
+	-pzexejavacmd "${JAVA} -classpath ${CLASSPATH} ${MAIN} ${@}" \
 	-pzexeconfig "./test-pzexe-linux-${ARCH}.json"          \
 	"$@"
