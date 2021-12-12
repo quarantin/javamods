@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import se.krka.kahlua.converter.KahluaConverterManager;
-import se.krka.kahlua.j2se.J2SEPlatform;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
@@ -27,8 +26,8 @@ public class Main implements Runnable {
 		for (String arg : args) {
 
 			if (arg.equals(bootstrapArg)) {
-				JavaModLoader.bootstrapJavaMods();
-				System.out.println(JavaModLoader.getClassPath());
+				Loader.bootstrapJavaMods();
+				System.out.println(Loader.getClassPath());
 				System.exit(0);
 			}
 
@@ -88,8 +87,8 @@ public class Main implements Runnable {
 			Field envField = zomboidLuaManagerClass.getDeclaredField("env");
 			KahluaTable env = (KahluaTable)envField.get(null);
 
-			JavaModExposer exposer = new JavaModExposer(manager, platform, env);
-			exposer.exposeJavaMods(JavaModLoader.loadJavaMods());
+			Exposer exposer = new Exposer(manager, platform, env);
+			exposer.exposeJavaMods(Loader.loadJavaMods());
 		}
 		catch (Exception error) {
 			throw new RuntimeException(error);

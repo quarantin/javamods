@@ -8,13 +8,15 @@ import se.krka.kahlua.integration.expose.LuaJavaClassExposer;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
+import zombie.javamods.mod.JavaMod;
 
-public class JavaModExposer extends LuaJavaClassExposer {
+
+public class Exposer extends LuaJavaClassExposer {
 
 	KahluaTable env;
 	List<Class<?>> exposed;
 
-	public JavaModExposer(KahluaConverterManager manager, Platform platform, KahluaTable env) {
+	public Exposer(KahluaConverterManager manager, Platform platform, KahluaTable env) {
 		super(manager, platform, env);
 		this.env = env;
 		this.exposed = new ArrayList<>();
@@ -26,19 +28,19 @@ public class JavaModExposer extends LuaJavaClassExposer {
 
 			Log.info("Loading java mod " + javaMod.getClass().getName() + " [" + javaMod.getJarPath() + "]");
 
-			List<Class<?>> exposedClasses = javaMod.getExposedClasses();
-			if (exposedClasses != null)
-				for (Class<?> classs : exposedClasses) {
+			List<Class<?>> classesToExpose = javaMod.getClassesToExpose();
+			if (classesToExpose != null)
+				for (Class<?> classs : classesToExpose) {
 					Log.info(" - exposing " + classs);
 					exposed.add(classs);
 					exposeLikeJavaRecursively(classs, env);
 				}
 
-			List<Object> globalObjects = javaMod.getGlobalObjects();
-			if (globalObjects != null)
-				for (Object globalObject : globalObjects) {
-					Log.info(" - exposing methods from class " + globalObject.getClass().getName());
-					exposeGlobalFunctions(globalObject);
+			List<Object> objectsWithGlobalFunctions = javaMod.getObjectsWithGlobalFunctions();
+			if (objectsWithGlobalFunctions != null)
+				for (Object objectWithGlobalFunctions : objectsWithGlobalFunctions) {
+					Log.info(" - adding global functions from " + objectWithGlobalFunctions.getClass().getName());
+					exposeGlobalFunctions(objectWithGlobalFunctions);
 				}
 
 			javaMod.startup();

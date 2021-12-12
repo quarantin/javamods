@@ -4,7 +4,7 @@ ZOMBOID  := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid/
 WARNINGS := -Xlint:deprecation -Xlint:unchecked
 
 build:
-	javac -cp "$(ZOMBOID)" $(WARNINGS) zombie/*/*.java && \
+	javac -cp "$(ZOMBOID)" $(WARNINGS) zombie/javamods/*.java zombie/javamods/mod/*.java && \
 	jar -cf "$(JAR)" zombie/
 
 install: build

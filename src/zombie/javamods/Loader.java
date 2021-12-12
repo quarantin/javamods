@@ -14,8 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.jar.JarFile;
 
+import zombie.javamods.mod.JavaMod;
 
-public class JavaModLoader {
+
+public class Loader {
 
 	private final static String javaModManifest = "javamods.txt";
 
