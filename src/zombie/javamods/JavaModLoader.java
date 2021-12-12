@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.jar.JarFile;
@@ -20,58 +19,149 @@ public class JavaModLoader {
 
 	private final static String javaModManifest = "javamods.txt";
 
+	private static HashSet<String> jarFiles = new HashSet<>();
 	private static HashSet<String> loadedMods = new HashSet<>();
 
-	private static List<JavaMod> loadJavaMod(JarFile jarFile) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
+	protected static String getClassPath() {
+		return String.join(System.getProperty("path.separator"), jarFiles);
+	}
+
+	private static List<String> getJavaModClassNames(JarFile jarFile) {
+
 		String line;
+		BufferedReader reader;
+		List<String> classNames = new ArrayList<>();
+
+		try {
+			reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarFile.getEntry(javaModManifest))));
+
+			while ((line = reader.readLine()) != null) {
+				line = line.strip();
+				if (!line.equals(""))
+					classNames.add(line);
+			}
+
+			reader.close();
+		}
+		catch (IOException error) {
+			Log.error("Error while reading " + javaModManifest + " from " + jarFile.getName());
+			Log.error(error);
+			return null;
+		}
+
+		return classNames;
+	}
+
+	private static JavaMod instantiateJavaMod(String jarPath, String className) {
+
+		Class<? extends JavaMod> classs;
+
+		try {
+			classs = Class.forName(className).asSubclass(JavaMod.class);
+		}
+		catch (ClassNotFoundException error) {
+			Log.error("Class definition not found for class " + className + " in " + jarPath);
+			Log.error(error);
+			return null;
+		}
+
+		if (!JavaMod.class.isAssignableFrom(classs)) {
+			Log.warn("Class " + className + " is not a JavaMod, skipping.");
+			return null;
+		}
+
+		if (loadedMods.contains(className)) {
+			Log.warn("Found duplicate class " + className + ", skipping.");
+			return null;
+		}
+
+		try {
+			JavaMod javaMod = classs.getDeclaredConstructor().newInstance();
+			javaMod.setJarPath(jarPath);
+			return javaMod;
+		}
+		catch (InstantiationException error) {
+			Log.error("Error while instantiating object from class " + className + " in " + jarPath);
+			Log.error(error);
+		}
+		catch (IllegalAccessException error) {
+			Log.error("Illegal access while instantiating object from class " + className + " in " + jarPath);
+			Log.error(error);
+		}
+		catch (InvocationTargetException error) {
+			Log.error("Exception in no-argument constructor from class " + className + " in " + jarPath);
+			Log.error(error);
+		}
+		catch (NoSuchMethodException error) {
+			Log.error("Missing no-argument constructor from class " + className + " in " + jarPath);
+			Log.error(error);
+		}
+
+		return null;
+	}
+
+	private static List<JavaMod> loadJavaMod(JarFile jarFile, boolean bootstrap) {
+
+		String jarPath = jarFile.getName();
 		List<JavaMod> javaMods = new ArrayList<>();
-		List<String> classList = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarFile.getEntry(javaModManifest))));
 
-		Log.warn("JavaMods: Loading mods from " + jarFile.getName());
-		while ((line = reader.readLine()) != null) {
-			line = line.strip();
-			if (!line.equals(""))
-				classList.addAll(Arrays.asList(line.split("[,;:]")));
+		List<String> classNames = getJavaModClassNames(jarFile);
+		if (classNames == null)
+			return null;
+
+		if (classNames.isEmpty()) {
+			Log.warn("No JavaMod class found in " + jarPath);
+			return null;
 		}
 
-		reader.close();
+		for (String className : classNames) {
 
-		if (classList.isEmpty()) {
-			Log.warn("JavaMods: No class found in " + javaModManifest);
-			return javaMods;
-		}
+			jarFiles.add(jarPath);
 
-		for (String className : classList) {
+			if (bootstrap)
+				break;
 
-			Class<? extends JavaMod> classs = Class.forName(className).asSubclass(JavaMod.class);
+			JavaMod javaMod = instantiateJavaMod(jarPath, className);
+			if (javaMod == null)
+				return null;
 
-			if (!JavaMod.class.isAssignableFrom(classs)) {
-				Log.warn("JavaMods: Class " + className + " is not a JavaMod, skipping.");
-				continue;
-			}
-
-			if (loadedMods.contains(className)) {
-				Log.warn("JavaMods: Found duplicate class " + className + ", skipping.");
-				continue;
-			}
-
-			Log.info("JavaMods: Loading JavaMod " + jarFile.getName());
-			javaMods.add(classs.getDeclaredConstructor().newInstance());
+			javaMods.add(javaMod);
 			loadedMods.add(className);
 		}
 
 		return javaMods;
 	}
 
-	public static List<JavaMod> loadJavaMods(File directory) throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
+	private static List<JavaMod> loadJavaMods(boolean bootstrap) {
 
+		List<JavaMod> newJavaMods;
 		List<JavaMod> javaMods = new ArrayList<>();
 
-		for (String fileName : directory.list())
-			if (fileName.toLowerCase().endsWith(".jar"))
-				javaMods.addAll(loadJavaMod(new JarFile(new File(directory, fileName))));
+		for (File modFolder : Filesystem.getMods())
+			for (String fileName : modFolder.list())
+				if (fileName.toLowerCase().endsWith(".jar")) {
+
+					File file = new File(modFolder, fileName);
+
+					try {
+						newJavaMods = loadJavaMod(new JarFile(file), bootstrap);
+						if (newJavaMods != null)
+							javaMods.addAll(newJavaMods);
+					}
+					catch (IOException error) {
+						Log.warn("I/O error while opening JAR File " + file.getAbsolutePath() + ", skipping.");
+						continue;
+					}
+				}
 
 		return javaMods;
+	}
+
+	public static List<JavaMod> loadJavaMods() {
+		return loadJavaMods(false);
+	}
+
+	public static List<JavaMod> bootstrapJavaMods() {
+		return loadJavaMods(true);
 	}
 }

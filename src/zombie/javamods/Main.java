@@ -16,11 +16,38 @@ import se.krka.kahlua.vm.Platform;
 
 public class Main implements Runnable {
 
-	private final static Class<?> zomboidMainClass = Core.getZomboidMainClass();
-	private final static Class<?> zomboidLuaManagerClass = Core.getZomboidLuaManagerClass();
+	private final static String debugArg     = "-debug";
+	private final static String bootstrapArg = "-bootstrap";
 
-	private Main() {
+	private static Class<?> zomboidMainClass;
+	private static Class<?> zomboidLuaManagerClass;
+
+	private Main(String[] args) throws IOException {
+
+		for (String arg : args) {
+
+			if (arg.equals(bootstrapArg)) {
+				JavaModLoader.bootstrapJavaMods();
+				System.out.println(JavaModLoader.getClassPath());
+				System.exit(0);
+			}
+
+			else if (arg.equals(debugArg))
+				Core.debug =  true;
+
+		}
+
+		Log.init();
+		Log.info("Starting JavaMods");
+		Log.info("Running with debug mode = " + Core.debug);
+
+		zomboidMainClass = Core.getZomboidMainClass();
+		zomboidLuaManagerClass = Core.getZomboidLuaManagerClass();
+
 		new Thread(this).start();
+	}
+
+	private void init(String[] args) {
 	}
 
 	private boolean isLuaManagerReady() {
@@ -47,11 +74,9 @@ public class Main implements Runnable {
 		}
 	}
 
-	private void exposeJavaMods(File javaModsDir) {
+	public void run() {
 
 		waitLuaManagerReady();
-
-		Core.initDebug();
 
 		try {
 			Field managerField = zomboidLuaManagerClass.getDeclaredField("converterManager");
@@ -64,26 +89,16 @@ public class Main implements Runnable {
 			KahluaTable env = (KahluaTable)envField.get(null);
 
 			JavaModExposer exposer = new JavaModExposer(manager, platform, env);
-			exposer.exposeJavaMods(JavaModLoader.loadJavaMods(javaModsDir));
+			exposer.exposeJavaMods(JavaModLoader.loadJavaMods());
 		}
 		catch (Exception error) {
 			throw new RuntimeException(error);
 		}
 	}
 
-	public void run() {
-
-		String installPath = System.getProperty("user.dir");
-		File javaModsDir = new File(installPath, "javamods");
-		if (!javaModsDir.exists())
-			javaModsDir.mkdirs();
-
-		exposeJavaMods(javaModsDir);
-	}
-
-	private static void startZomboid(String[] args) {
+	private static void startZomboid() {
 		try {
-			final Object[] arg = new Object[]{ args };
+			final Object[] arg = new Object[]{ new String[] {} };
 			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
 		}
 		catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException error) {
@@ -92,8 +107,7 @@ public class Main implements Runnable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Log.init();
-		new Main();
-		startZomboid(args);
+		new Main(args);
+		startZomboid();
 	}
 }
