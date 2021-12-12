@@ -39,7 +39,7 @@ public class Loader {
 			reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarFile.getEntry(javaModManifest))));
 
 			while ((line = reader.readLine()) != null) {
-				line = line.strip();
+				line = line.trim();
 				if (!line.equals(""))
 					classNames.add(line);
 			}
