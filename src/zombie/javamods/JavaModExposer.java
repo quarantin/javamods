@@ -24,20 +24,22 @@ public class JavaModExposer extends LuaJavaClassExposer {
 
 		for (JavaMod javaMod : javaMods) {
 
-			Log.info("JavaMods: Exposing JavaMod: " + javaMod);
+			Log.info("Loading java mod " + javaMod.getClass().getName() + " [" + javaMod.getJarPath() + "]");
 
 			List<Class<?>> exposedClasses = javaMod.getExposedClasses();
 			if (exposedClasses != null)
 				for (Class<?> classs : exposedClasses) {
-					Log.info("JavaMods: Exposing class " + classs);
+					Log.info(" - exposing " + classs);
 					exposed.add(classs);
 					exposeLikeJavaRecursively(classs, env);
 				}
 
 			List<Object> globalObjects = javaMod.getGlobalObjects();
 			if (globalObjects != null)
-				for (Object globalObject : globalObjects)
+				for (Object globalObject : globalObjects) {
+					Log.info(" - exposing methods from class " + globalObject.getClass().getName());
 					exposeGlobalFunctions(globalObject);
+				}
 
 			javaMod.startup();
 		}
