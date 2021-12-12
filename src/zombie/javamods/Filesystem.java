@@ -2,6 +2,11 @@ package zombie.javamods;
 
 import java.io.File;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +31,17 @@ public class Filesystem {
 		if (steamInstallDir != null)
 			return steamInstallDir;
 
-		String jarPath = Filesystem.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		System.out.println("DEBUG: " + jarPath);
-		if (System.getProperty("os.name").startsWith("Windows"))
-			jarPath = jarPath.substring(1);
+		URI jarURI = null;
+		try {
+			jarURI = Filesystem.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+		}
+		catch (URISyntaxException error) {
+			throw new RuntimeException(error);
+		}
 
-		File installDir = new File(jarPath).getParentFile();
+		File installDir = Paths.get(jarURI).toFile().getParentFile();
+		System.out.println("DEBUG: jarURI     = " + jarURI);
+		System.out.println("DEBUG: installDir = " + installDir);
 
 		if (!installDir.exists() || !installDir.isDirectory())
 			throw new RuntimeException("Couldn't find Steam install folder!");
