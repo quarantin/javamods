@@ -51,10 +51,10 @@ public class Log {
 		log("ERROR  ", message);
 	}
 
-	public static void error(Exception exception) {
+	public static void error(Throwable throwable) {
 		if (out != null) {
-			out.println("\n === STACK TRACE ===");
-			exception.printStackTrace(out);
+			out.println("\n=== STACK TRACE ===\n");
+			throwable.printStackTrace(out);
 			out.println();
 		}
 	}
