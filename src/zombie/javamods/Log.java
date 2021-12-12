@@ -20,18 +20,27 @@ public class Log {
 		out = new PrintWriter(Filesystem.getLogFile());
 	}
 
+	protected static void exit() {
+		if (out != null)
+			out.close();
+	}
+
 	private static void log(String type, String message) {
-		String date = dateFormat.format(calendar.getTime());
-		out.println(type + " " + date + ": " + message);
+
+		if (out != null) {
+			String date = dateFormat.format(calendar.getTime());
+			out.println(type + "\t" + date + "\t" + message);
+			out.flush();
+		}
 	}
 
 	public static void debug(String message) {
 		if (Core.debug)
-			log("DEBUG", message);
+			log("DEBUG  ", message);
 	}
 
 	public static void info(String message) {
-		log("INFO", message);
+		log("INFO   ", message);
 	}
 
 	public static void warn(String message) {
@@ -39,6 +48,14 @@ public class Log {
 	}
 
 	public static void error(String message) {
-		log("ERROR", message);
+		log("ERROR  ", message);
+	}
+
+	public static void error(Exception exception) {
+		if (out != null) {
+			out.println("\n === STACK TRACE ===");
+			exception.printStackTrace(out);
+			out.println();
+		}
 	}
 }
