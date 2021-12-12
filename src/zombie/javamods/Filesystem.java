@@ -40,7 +40,6 @@ public class Filesystem {
 		}
 
 		File installDir = Paths.get(jarURI).toFile().getParentFile();
-		System.out.println("DEBUG: installDir = " + installDir);
 
 		if (!installDir.exists() || !installDir.isDirectory())
 			throw new RuntimeException("Couldn't find Steam install folder!");
@@ -135,7 +134,6 @@ public class Filesystem {
 
 		File modDir;
 
-		System.out.println("LOCATION: " + modLocation);
 		for (String modId : modLocation.list()) {
 
 			File modFolder = new File(modLocation, modId);
