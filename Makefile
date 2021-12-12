@@ -23,18 +23,18 @@ buildjar:
 	$(MAKE) -C src build
 
 buildlinux:
-	mkdir -p $(BUILDLINUX)/$(NAME) && \
-	cp $(JARFILE) $(BUILDLINUX)    && \
+	mkdir -p $(BUILDLINUX)      && \
+	cp $(JARFILE) $(BUILDLINUX) && \
 	cp $(SCRIPTLINUX) $(BUILDLINUX)/$(NAME).sh
 
 buildmacosx:
-	mkdir -p $(BUILDMACOSX)/$(NAME) && \
-	cp $(JARFILE) $(BUILDMACOSX)    && \
+	mkdir -p $(BUILDMACOSX)      && \
+	cp $(JARFILE) $(BUILDMACOSX) && \
 	cp $(SCRIPTMACOSX) $(BUILDMACOSX)/$(NAME).sh
 
 buildwindows:
-	mkdir -p $(BUILDWINDOWS)/$(NAME) && \
-	cp $(JARFILE) $(BUILDWINDOWS)    && \
+	mkdir -p $(BUILDWINDOWS)      && \
+	cp $(JARFILE) $(BUILDWINDOWS) && \
 	cp $(SCRIPTWINDOWS) $(BUILDWINDOWS)/$(NAME).bat
 
 bundle: build dist bundlelinux bundlemacosx bundlewindows
