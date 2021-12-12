@@ -134,6 +134,11 @@ public class Filesystem {
 
 		File modDir;
 
+		if (!modLocation.exists()) {
+			Log.warn("Mod folder does not exist: " + modLocation + ", skipping.");
+			return;
+		}
+
 		for (String modId : modLocation.list()) {
 
 			File modFolder = new File(modLocation, modId);
