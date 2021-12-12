@@ -14,6 +14,7 @@ import zombie.gameStates.MainScreenState;
 public class Core {
 
 	public static boolean debug;
+	public static boolean server;
 	private static KahluaTable env;
 
 	public static Class<?> getZomboidMainClass() {
