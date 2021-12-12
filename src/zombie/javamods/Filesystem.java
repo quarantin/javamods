@@ -90,6 +90,10 @@ public class Filesystem {
 		return new File(getUserProfileDir(), "Workshop");
 	}
 
+	public static File getUserProfileSubdir(String subdir) {
+		return new File(getUserProfileDir(), subdir);
+	}
+
 	private static boolean isModFolder(File modFolder) {
 		File modInfo = new File(modFolder, MOD_INFO);
 		return modInfo.exists() && modInfo.isFile();
