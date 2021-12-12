@@ -27,6 +27,9 @@ public class Filesystem {
 			return steamInstallDir;
 
 		String jarPath = Filesystem.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		if (System.getProperty("os.name").startsWith("Windows"))
+			jarPath = jarPath.substring(1);
+
 		File installDir = new File(jarPath).getParentFile();
 
 		if (!installDir.exists() || !installDir.isDirectory())
