@@ -14,6 +14,7 @@ JARFILE       := src/$(NAME).jar
 SCRIPTLINUX   := scripts/$(NAME)-linux.sh
 SCRIPTMACOSX  := scripts/$(NAME)-macosx.sh
 SCRIPTWINDOWS := scripts/$(NAME)-windows.bat
+SCRIPTWINDOWSSERVER := scripts/$(NAME)-windows-server.bat
 
 all: bundle
 
@@ -33,9 +34,10 @@ buildmacosx:
 	cp $(SCRIPTMACOSX) $(BUILDMACOSX)/$(NAME).sh
 
 buildwindows:
-	mkdir -p $(BUILDWINDOWS)      && \
-	cp $(JARFILE) $(BUILDWINDOWS) && \
-	cp $(SCRIPTWINDOWS) $(BUILDWINDOWS)/$(NAME).bat
+	mkdir -p                  $(BUILDWINDOWS) && \
+	cp $(JARFILE)             $(BUILDWINDOWS) && \
+	cp $(SCRIPTWINDOWS)       $(BUILDWINDOWS)/$(NAME).bat && \
+	cp $(SCRIPTWINDOWSSERVER) $(BUILDWINDOWS)/$(NAME)-server.bat
 
 bundle: build dist bundlelinux bundlemacosx bundlewindows
 
