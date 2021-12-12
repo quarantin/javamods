@@ -1,20 +1,28 @@
 package zombie.javamods;
 
-import java.util.Calendar;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
 
 
 public class Log {
 
-	private final static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
+	private final static String format = "yyyy-MM-dd HH:mm:ss";
 	private final static Calendar calendar = Calendar.getInstance();
-	private final static SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	private final static SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 
+	private static PrintWriter out;
+
+	protected static void init() throws IOException {
+		out = new PrintWriter(Filesystem.getLogFile());
+	}
 
 	private static void log(String type, String message) {
 		String date = dateFormat.format(calendar.getTime());
-		System.out.println(type + " " + date + ": " + message);
+		out.println(type + " " + date + ": " + message);
 	}
 
 	public static void debug(String message) {

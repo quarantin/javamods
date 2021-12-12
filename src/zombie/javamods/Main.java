@@ -91,7 +91,8 @@ public class Main implements Runnable {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		Log.init();
 		new Main();
 		startZomboid(args);
 	}
