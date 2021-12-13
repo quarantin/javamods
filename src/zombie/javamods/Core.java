@@ -70,7 +70,7 @@ public class Core {
 			try {
 				Field envField = LuaManager.class.getDeclaredField("env");
 				KahluaTable env = (KahluaTable)envField.get(null);
-				Log.debug("LuaManager.env: " + env + " == " + Core.env);
+				//Log.debug("LuaManager.env: " + env + " == " + Core.env);
 
 				if (env != Core.env)
 					init();
