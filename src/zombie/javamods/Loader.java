@@ -79,7 +79,7 @@ public class Loader {
 		}
 
 		if (loadedMods.contains(className)) {
-			Log.warn("Found duplicate class " + className + ", skipping.");
+			Log.warn("Found duplicate class " + className + "[" + jarPath + "] , skipping.");
 			return null;
 		}
 
