@@ -13,8 +13,8 @@ import zombie.javamods.mod.JavaMod;
 
 public class Exposer extends LuaJavaClassExposer {
 
-	KahluaTable env;
-	List<Class<?>> exposed;
+	private KahluaTable env;
+	private List<Class<?>> exposed;
 
 	public Exposer(KahluaConverterManager manager, Platform platform, KahluaTable env) {
 		super(manager, platform, env);
