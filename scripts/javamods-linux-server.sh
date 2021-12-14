@@ -23,7 +23,7 @@ fi
 echo "${ARCH}-bit java detected"
 JAVA="${JAVAROOT}/bin/java"
 MAIN="zombie.javamods.Main"
-CLASSPATH=".:./*:$("${JAVA}" -classpath javamods.jar ${MAIN} -bootstrap)"
+CLASSPATH="./java/:./java/*:$("${JAVA}" -classpath javamods.jar ${MAIN} -server -bootstrap)"
 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:./:./linux${ARCH}:${JAVAROOT}/lib/${ARCHNAME}"
 LD_PRELOAD="${LD_PRELOAD}:./libjsig.so"
 "${JAVA}" \
