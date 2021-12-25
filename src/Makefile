@@ -1,6 +1,7 @@
 JAR := javamods.jar
 SCRIPT := javamods.sh
 ZOMBOID  := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid/
+ZOMBOIDSERVER  := $(HOME)/.steam/steam/steamapps/common/Project Zomboid Dedicated Server/
 WARNINGS := -Xlint:deprecation -Xlint:unchecked
 
 build:
@@ -10,6 +11,10 @@ build:
 install: build
 	cp $(JAR) $(ZOMBOID) && \
 	cp ../scripts/javamods-linux.sh $(ZOMBOID)/$(SCRIPT)
+
+installserver: build
+	cp $(JAR) "$(ZOMBOIDSERVER)/java/" && \
+	cp ../scripts/javamods-linux-server.sh "$(ZOMBOIDSERVER)/$(SCRIPT)"
 
 run: install
 	cd $(ZOMBOID) && ./$(SCRIPT)
