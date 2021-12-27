@@ -1,0 +1,3 @@
+name=Debug Switch
+id=DebugSwitch
+description=Add global function setDebug(boolean) so debug mode can be enabled or disabled during an active game. 
