@@ -31,6 +31,7 @@ public class Loader {
 
 	private static List<String> getJavaModClassNames(JarFile jarFile) {
 
+		// TODO Don't use javamods.txt but rather iterate the list of class to find the ones that inherit from JavaMod or implement JavaModInterface
 		String line;
 		BufferedReader reader;
 		List<String> classNames = new ArrayList<>();
