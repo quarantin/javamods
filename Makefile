@@ -14,27 +14,11 @@ ZSERVER := TODO
 
 else
 
-UNAME   := $(shell uname -s)
-
-ifeq ($(UNAME), Linux)
-
 EXT     := sh
 OSNAME  := linux
 ZOMBOID := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid
 ZSERVER := $(HOME)/pzserver
 
-else ifeq ($(UNAME), Darwin)
-
-EXT     := sh
-OSNAME  := macosx
-ZOMBOID := TODO
-ZSERVER := TODO
-
-else
-
-	$(error Unsupported platform $(UANME))
-
-endif
 endif
 
 SCRIPTNAME := $(NAME)-$(OSNAME).$(EXT)
