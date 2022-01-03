@@ -17,6 +17,11 @@ public interface JavaModInterface {
 	public List<Object> getObjectsWithGlobalFunctions();
 
 	/*
+	 * Returns a list of BaseCommand classes.
+	 */
+	public List<Class<?>> getServerCommands();
+
+	/*
 	 * Called at startup. This is where you can initialize your Java mod if needed.
 	 */
 	public void startup();

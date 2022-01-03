@@ -9,6 +9,10 @@ public abstract class ExposeClassJavaMod extends JavaMod {
 		return null;
 	}
 
+	public List<Class<?>> getServerCommands() {
+		return null;
+	}
+
 	public void startup() {
 	}
 }

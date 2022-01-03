@@ -1,0 +1,3 @@
+name=Pause Command
+id=PauseCommand
+description=Add a /pause server command to toggle pause/unpause in MP (admin only)

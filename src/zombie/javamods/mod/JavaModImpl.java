@@ -25,6 +25,11 @@ public class JavaModImpl extends JavaMod {
 	}
 
 	@Override
+	public List<Class<?>> getServerCommands() {
+		return null;
+	}
+
+	@Override
 	public void startup() {
 	}
 
