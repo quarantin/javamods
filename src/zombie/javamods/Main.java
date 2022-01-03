@@ -8,8 +8,12 @@ public class Main implements Runnable {
 	private final static String debugArg     = "-debug";
 	private final static String serverArg    = "-server";
 	private final static String bootstrapArg = "-bootstrap";
+	private final static String maxPlayersArg = "-maxplayers";
 
 	private Main(String[] args) throws IOException {
+
+		int maxPlayers = 0;
+		String previousArg = null;
 
 		for (String arg : args) {
 
@@ -25,7 +29,14 @@ public class Main implements Runnable {
 			else if (arg.equals(serverArg))
 				Core.server = true;
 
+			else if (maxPlayersArg.equals(previousArg))
+				maxPlayers = Integer.parseInt(arg);
+
+			previousArg = arg;
 		}
+
+		if (maxPlayers > 0)
+			CustomServerOptions.setMaxPlayers(maxPlayers);
 
 		Log.init();
 		Log.info("Starting JavaMods");

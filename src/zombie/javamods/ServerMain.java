@@ -7,16 +7,27 @@ public class ServerMain implements Runnable {
 
 	private final static String debugArg     = "-debug";
 	private final static String bootstrapArg = "-bootstrap";
+	private final static String maxPlayersArg = "-maxplayers";
 
 	private ServerMain(String[] args) throws IOException {
 
 		Core.server = true;
+		int maxPlayers = 0;
+		String previousArg = null;
 
 		for (String arg : args) {
 
 			if (arg.equals(debugArg))
 				Core.debug =  true;
+
+			else if (maxPlayersArg.equals(previousArg))
+				maxPlayers = Integer.parseInt(arg);
+
+			previousArg = arg;
 		}
+
+		if (maxPlayers > 0)
+			CustomServerOptions.setMaxPlayers(maxPlayers);
 
 		Log.init();
 		Log.info("Starting JavaMods Server");
