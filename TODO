@@ -1,0 +1,22 @@
+Handle update of JavaMods (The framework)
+Load JavaMods directly from the mod folder
+Try to keep JavaMods.jar in its mod folder
+Check version of JavaMods and Java mod see if they're compatible
+Only allow exposing class from JavaMod being loaded, unless running in debug mod
+Prevent dangerous class from being exposed (Like System, Runtime etc)
+Make script for Windows
+Make script for Mac
+Write documentation for modders
+Write documentation for users
+Test script for Windows server
+Code signing for java mods
+Pause the game while quicksaving to avoid corruptions
+Make a JavaMod: DebugSwitch to switch debug on/off while in game
+
+PKI:
+https://valist.io/
+https://www.openca.org/
+https://www.signserver.org/
+https://smallstep.com/docs/step-ca
+https://github.com/openwisp/django-x509
+https://awesomeopensource.com/project/varasys/certshop
