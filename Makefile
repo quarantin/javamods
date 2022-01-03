@@ -1,68 +1,83 @@
-NAME          := javamods
+NAME    := javamods
 
-BUILD         := build
-BUILDLINUX    := $(BUILD)/linux
-BUILDMACOSX   := $(BUILD)/macosx
-BUILDWINDOWS  := $(BUILD)/windows
+DIST    := dist
+BUILD   := build
+JARNAME := $(NAME).jar
+JARFILE := src/$(JARNAME)
 
-BUNDLE        := dist
-BUNDLELINUX   := $(BUNDLE)/$(NAME)-linux.zip
-BUNDLEMACOSX  := $(BUNDLE)/$(NAME)-macosx.zip
-BUNDLEWINDOWS := $(BUNDLE)/$(NAME)-windows.zip
+ifeq ($(OS), Windows_NT)
 
-JARFILE       := src/$(NAME).jar
-SCRIPTLINUX   := scripts/$(NAME)-linux.sh
-SCRIPTMACOSX  := scripts/$(NAME)-macosx.sh
-SCRIPTWINDOWS := scripts/$(NAME)-windows.bat
-SCRIPTWINDOWSSERVER := scripts/$(NAME)-windows-server.bat
+EXT     := bat
+OSNAME  := windows
+ZOMBOID := TODO
+ZSERVER := TODO
+
+else
+
+UNAME   := $(shell uname -s)
+
+ifeq ($(UNAME), Linux)
+
+EXT     := sh
+OSNAME  := linux
+ZOMBOID := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid
+ZSERVER := $(HOME)/pzserver
+
+else ifeq ($(UNAME), Darwin)
+
+EXT     := sh
+OSNAME  := macosx
+ZOMBOID := TODO
+ZSERVER := TODO
+
+else
+
+	$(error Unsupported platform $(UANME))
+
+endif
+endif
+
+SCRIPTNAME := $(NAME)-$(OSNAME).$(EXT)
+
+BUNDLE  := $(DIST)/$(NAME)-$(OSNAME).zip
+SCRIPT  := scripts/$(SCRIPTNAME)
+SERVER  := scripts/$(NAME)-$(OSNAME)-server.$(EXT)
+TARGET  := $(DIST)/javamods
 
 all: bundle
 
-build: buildjar buildlinux buildmacosx buildwindows
+bundle: build
+	mkdir -p $(DIST)
+	cd $(BUILD)/$(OSNAME) && zip ../../$(BUNDLE)   *
+
+build: buildjar
+	mkdir -p      $(BUILD)/$(OSNAME)                && \
+	cp $(JARFILE) $(BUILD)/$(OSNAME)                && \
+	cp $(SCRIPT)  $(BUILD)/$(OSNAME)/$(NAME).$(EXT) && \
+	cp $(SERVER)  $(BUILD)/$(OSNAME)/$(NAME)-server-start.$(EXT)
 
 buildjar:
 	$(MAKE) -C src build
 
-buildlinux:
-	mkdir -p $(BUILDLINUX)      && \
-	cp $(JARFILE) $(BUILDLINUX) && \
-	cp $(SCRIPTLINUX) $(BUILDLINUX)/$(NAME).sh
-
-buildmacosx:
-	mkdir -p $(BUILDMACOSX)      && \
-	cp $(JARFILE) $(BUILDMACOSX) && \
-	cp $(SCRIPTMACOSX) $(BUILDMACOSX)/$(NAME).sh
-
-buildwindows:
-	mkdir -p                  $(BUILDWINDOWS) && \
-	cp $(JARFILE)             $(BUILDWINDOWS) && \
-	cp $(SCRIPTWINDOWS)       $(BUILDWINDOWS)/$(NAME).bat && \
-	cp $(SCRIPTWINDOWSSERVER) $(BUILDWINDOWS)/$(NAME)-server.bat
-
-bundle: build dist bundlelinux bundlemacosx bundlewindows
-
-bundlelinux:
-	cd $(BUILDLINUX) && zip ../../$(BUNDLELINUX) *
-
-bundlemacosx:
-	cd $(BUILDMACOSX) && zip ../../$(BUNDLEMACOSX) *
-
-bundlewindows:
-	cd $(BUILDWINDOWS) && zip ../../$(BUNDLEWINDOWS) *
-
-dist:
-	mkdir -p dist
-
-clean: cleansrc
-	rm -rf $(BUILD) $(BUNDLE)
-
-cleansrc:
+clean:
+	rm -rf $(BUILD) $(DIST)
 	$(MAKE) -C src clean
 
-install: bundle
-	./scripts/install-linux.sh
+installzomboid:
+	[ -d "$(ZOMBOID)" ] && unzip -o -d "$(ZOMBOID)" "$(BUNDLE)" && \
+	rm -f "$(ZOMBOID)/$(SERVER)"
 
-uninstall:
-	./scripts/uninstall-linux.sh
+installzserver:
+	[ -d "$(ZSERVER)" ] && unzip -o -d "$(ZSERVER)" "$(BUNDLE)" && \
+	mv "$(ZSERVER)/$(JARNAME)" "$(ZSERVER)/java"                && \
+	rm -f "$(ZSERVER)/$(NAME).$(EXT)"
 
-.PHONY: build dist
+install: bundle installzomboid installzserver
+
+uninstallzomboid:
+	[ -d "$(ZOMBOID)" ] && rm -f "$(ZOMBOID)/$(NAME).sh" "$(ZOMBOID)/$(JARNAME)"
+
+uninstallzserver:
+	[ -d "$(ZSERVER)" ] && rm -f "$(ZSERVER)/$(NAME)-server-start.sh" "$(ZSERVER)/java/$(JARNAME)" "$(ZSERVER)/ProjectJomboid64"*
+
+uninstall: clean uninstallzomboid uninstallzserver
