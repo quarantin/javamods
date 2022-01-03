@@ -51,24 +51,24 @@ public class Main implements Runnable {
 		Core.loop();
 	}
 
-	private static void startZomboid() {
+	private static void startZomboid(String[] args) {
 
 		try {
-			final Object[] arg = new Object[]{ new String[] {} };
+			final Object[] argv = new Object[]{ args };
 			Class<?> zomboidMainClass = Core.getZomboidClientMainClass();
-			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
+			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, argv);
 		}
 		catch (Exception error) {
 			Log.error(error);
 		}
 	}
 
-	private static void startZomboidServer() {
+	private static void startZomboidServer(String[] args) {
 
 		try {
-			final Object[] arg = new Object[]{ new String[] { "-statistic" }};
+			final Object[] argv = new Object[]{ args };
 			Class<?> zomboidMainClass = Core.getZomboidServerMainClass();
-			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
+			zomboidMainClass.getDeclaredMethod("main", String[].class).invoke(null, argv);
 		}
 		catch (Exception error) {
 			Log.error(error);
@@ -80,9 +80,9 @@ public class Main implements Runnable {
 		new Main(args);
 
 		if (Core.server)
-			startZomboidServer();
+			startZomboidServer(args);
 		else
-			startZomboid();
+			startZomboid(args);
 
 		Log.exit();
 	}

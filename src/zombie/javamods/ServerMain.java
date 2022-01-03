@@ -45,9 +45,9 @@ public class ServerMain implements Runnable {
 	private static void startZomboidServer(String[] args) {
 
 		try {
-			final Object[] arg = new Object[]{ args };
+			final Object[] argv = new Object[]{ args };
 			Class<?> zomboidServerMainClass = Core.getZomboidServerMainClass();
-			zomboidServerMainClass.getDeclaredMethod("main", String[].class).invoke(null, arg);
+			zomboidServerMainClass.getDeclaredMethod("main", String[].class).invoke(null, argv);
 		}
 		catch (Exception error) {
 			Log.error(error);
