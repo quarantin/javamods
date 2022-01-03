@@ -1,36 +1,43 @@
 #!/bin/bash
-cd "$(dirname "${0}")"
+#
+###############################################################################
+#
+# Edit memory option -Xmx in ProjectZomboid64.json for 64bit servers (common)
+#   or ProjectZomboid32.json for 32bit servers (rare)
+#
+############
 
-INSTDIR="$(pwd)"
 
-if "./jre64/bin/java" -version > /dev/null 2>&1; then
-	ARCH="64"
-	ARCHNAME="amd64"
-	JAVAROOT="${INSTDIR}/jre64"
-	DEFAULT_RAM="2048m"
+if [ -f "./ProjectZomboid32" ]; then
+	bbe -e 's/ProjectZomboid32.json/ProjectJomboid32.json/' ProjectZomboid32 > ProjectJomboid32
+	jq --tab '.mainClass = "zombie/javamods/ServerMain" | .classpath |= (. + ["java/javamods.jar"])' ProjectZomboid32.json > ProjectJomboid32.json
 
-elif "./jre/bin/java" -version > /dev/null 2>&1; then
-	ARCH="32"
-	ARCHNAME="i386"
-	JAVAROOT="${INSTDIR}/jre"
-	DEFAULT_RAM="768m"
-
-else
-	echo "couldn't determine 32/64 bit of java"
-	exit 1
+elif [ -f "./ProjectZomboid64" ]; then
+	bbe -e 's/ProjectZomboid64.json/ProjectJomboid64.json/' ProjectZomboid64 > ProjectJomboid64
+	jq --tab '.mainClass = "zombie/javamods/ServerMain" | .classpath |= (. + ["java/javamods.jar"])' ProjectZomboid64.json > ProjectJomboid64.json
 fi
 
-echo "${ARCH}-bit java detected"
-JAVA="${JAVAROOT}/bin/java"
-MAIN="zombie.javamods.Main"
-CLASSPATH="./java/:./java/*:$("${JAVA}" -classpath javamods.jar ${MAIN} -server -bootstrap)"
-LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:./:./linux${ARCH}:${JAVAROOT}/lib/${ARCHNAME}"
-LD_PRELOAD="${LD_PRELOAD}:./libjsig.so"
-"${JAVA}" \
-	-classpath "${CLASSPATH}" -Djava.awt.headless=true -XstartOnFirstThread \
-	-Xms${DEFAULT_RAM} -Xmx${DEFAULT_RAM} \
-	-Dzomboid.steam=0 -Dzomboid.znetlog=1 \
-	-Djava.library.path=linux${ARCH}/:./ \
-	-XX:-UseSplitVerifier -Djava.security.egd=file:/dev/urandom \
-	${MAIN} -server "$@"
+INSTDIR="`dirname $0`" ; cd "${INSTDIR}" ; INSTDIR="`pwd`"
+
+if "${INSTDIR}/jre64/bin/java" -version > /dev/null 2>&1; then
+	echo "64-bit java detected"
+	export PATH="${INSTDIR}/jre64/bin:$PATH"
+	export LD_LIBRARY_PATH="${INSTDIR}/linux64:${INSTDIR}/natives:${INSTDIR}:${INSTDIR}/jre64/lib/amd64:${LD_LIBRARY_PATH}"
+	JSIG="libjsig.so"
+	LD_PRELOAD="${LD_PRELOAD}:${JSIG}" ./ProjectJomboid64 "$@"
+elif "${INSTDIR}/jre/bin/java" -client -version > /dev/null 2>&1; then
+	echo "32-bit java detected"
+	export PATH="${INSTDIR}/jre/bin:$PATH"
+	export LD_LIBRARY_PATH="${INSTDIR}/linux32:${INSTDIR}/natives:${INSTDIR}:${INSTDIR}/jre/lib/i386:${LD_LIBRARY_PATH}"
+	JSIG="libjsig.so"
+	LD_PRELOAD="${LD_PRELOAD}:${JSIG}" ./ProjectJomboid32 "$@"
+else
+	echo "couldn't determine 32/64 bit of java"
+fi
+exit 0
+
+#
+# EOF
+#
+###############################################################################
 
