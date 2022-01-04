@@ -23,7 +23,7 @@ public class Filesystem {
 	private static List<File> modFolders;
 
 	public static File getLogFile() {
-		return new File(getUserProfileDir(), "console-javamods.txt");
+		return new File(getUserProfileDir(), "javamods-console.txt");
 	}
 
 	public static File getSteamInstallDir() {
@@ -54,7 +54,11 @@ public class Filesystem {
 			return steamWorkshopDir;
 
 		File workshopDir = null;
-		File dir = getSteamInstallDir().getParentFile().getParentFile();
+		File dir = getSteamInstallDir();
+		if (Core.server)
+			dir = new File(dir.getParentFile(), "steamapps");
+		else
+			dir = dir.getParentFile().getParentFile();
 
 		for (int i = 0; i < 3; i++) {
 
@@ -68,7 +72,7 @@ public class Filesystem {
 		}
 
 		if (workshopDir == null || !workshopDir.exists() || !workshopDir.isDirectory())
-			throw new RuntimeException("Couldn't find Steam workshop folder!");
+			System.err.println("Couldn't find Steam workshop folder!");
 
 		steamWorkshopDir = workshopDir;
 		return steamWorkshopDir;
@@ -126,7 +130,7 @@ public class Filesystem {
 		return dir.exists() && dir.isDirectory() ? dir : null;
 	}
 
-	private static void scanModsHelper(File modLocation, List<File> modFolders) {
+	private static void scanModsHelper(File modLocation) {
 
 		for (String modId : modLocation.list()) {
 			File modFolder = new File(modLocation, modId);
@@ -135,9 +139,12 @@ public class Filesystem {
 		}
 	}
 
-	private static void scanMods(File modLocation, List<File> modFolders) {
+	private static void scanMods(File modLocation) {
 
 		File modDir;
+
+		if (modLocation == null)
+			return;
 
 		if (!modLocation.exists()) {
 			Log.warn("Mod folder does not exist: " + modLocation + ", skipping.");
@@ -151,10 +158,10 @@ public class Filesystem {
 				modFolders.add(modFolder);
 
 			else if ((modDir = isSteamWorkshopMod(modFolder)) != null)
-				scanModsHelper(modDir, modFolders);
+				scanModsHelper(modDir);
 
 			else if ((modDir = isUserProfileWorkshopMod(modFolder)) != null)
-				scanModsHelper(modDir, modFolders);
+				scanModsHelper(modDir);
 		}
 	}
 
@@ -173,12 +180,11 @@ public class Filesystem {
 		if (modFolders != null)
 			return modFolders;
 
-		List<File> modLists = new ArrayList<>();
+		modFolders = new ArrayList<>();
 
 		for (File modLocation : getModLocations())
-			scanMods(modLocation, modLists);
+			scanMods(modLocation);
 
-		modFolders = modLists;
 		return modFolders;
 	}
 }

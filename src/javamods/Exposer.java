@@ -1,6 +1,6 @@
 package javamods;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import se.krka.kahlua.converter.KahluaConverterManager;
@@ -8,18 +8,18 @@ import se.krka.kahlua.integration.expose.LuaJavaClassExposer;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
-import javamods.mod.JavaMod;
+import javamods.JavaMod;
 
 
 public class Exposer extends LuaJavaClassExposer {
 
 	private KahluaTable env;
-	private List<Class<?>> exposed;
+	private HashSet<Class<?>> exposed;
 
 	public Exposer(KahluaConverterManager manager, Platform platform, KahluaTable env) {
 		super(manager, platform, env);
 		this.env = env;
-		this.exposed = new ArrayList<>();
+		this.exposed = new HashSet<>();
 	}
 
 	public void exposeJavaMods(List<JavaMod> javaMods) {
@@ -27,7 +27,7 @@ public class Exposer extends LuaJavaClassExposer {
 		Log.info("Exposing java mods...");
 		for (JavaMod javaMod : javaMods) {
 
-			Log.info("Loading java mod " + javaMod.getClass().getName() + " [" + javaMod.getJarPath() + "]");
+			Log.info("Exposing java mod " + javaMod.getClass().getName() + " [" + javaMod.getJarPath() + "]");
 
 			List<Class<?>> classesToExpose = javaMod.getClassesToExpose();
 			if (classesToExpose != null)

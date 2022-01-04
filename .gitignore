@@ -1,4 +1,4 @@
 /build
 /dist
-/src/javamods.jar
+/javamods.jar
 *.class

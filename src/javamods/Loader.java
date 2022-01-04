@@ -14,7 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.jar.JarFile;
 
-import javamods.mod.JavaMod;
+import javamods.JavaMod;
+
+import javamods.mods.LuaManagerMod;
+import javamods.mods.MaxPlayersMod;
 
 
 public class Loader {
@@ -85,9 +88,7 @@ public class Loader {
 		}
 
 		try {
-			JavaMod javaMod = classs.getDeclaredConstructor().newInstance();
-			javaMod.setJarPath(jarPath);
-			return javaMod;
+			return classs.getDeclaredConstructor().newInstance();
 		}
 		catch (InstantiationException error) {
 			Log.error("Error while instantiating object from class " + className + " in " + jarPath);
@@ -116,11 +117,11 @@ public class Loader {
 
 		List<String> classNames = getJavaModClassNames(jarFile);
 		if (classNames == null)
-			return null;
+			return javaMods;
 
 		if (classNames.isEmpty()) {
 			Log.warn("No JavaMod class found in " + jarPath);
-			return null;
+			return javaMods;
 		}
 
 		for (String className : classNames) {
@@ -131,11 +132,10 @@ public class Loader {
 				break;
 
 			JavaMod javaMod = instantiateJavaMod(jarPath, className);
-			if (javaMod == null)
-				return null;
-
-			javaMods.add(javaMod);
-			loadedMods.add(className);
+			if (javaMod != null) {
+				javaMods.add(javaMod);
+				loadedMods.add(className);
+			}
 		}
 
 		return javaMods;
@@ -143,11 +143,13 @@ public class Loader {
 
 	private static List<JavaMod> loadJavaMods(boolean bootstrap) {
 
-		if (Loader.javaMods != null)
-			return Loader.javaMods;
+		if (javaMods != null)
+			return javaMods;
 
-		List<JavaMod> newJavaMods;
-		List<JavaMod> javaMods = new ArrayList<>();
+		javaMods = new ArrayList<>();
+
+		javaMods.add(new LuaManagerMod());
+		javaMods.add(new MaxPlayersMod());
 
 		for (File modFolder : Filesystem.getMods())
 			for (String fileName : modFolder.list())
@@ -156,9 +158,7 @@ public class Loader {
 					File file = new File(modFolder, fileName);
 
 					try {
-						newJavaMods = loadJavaMod(new JarFile(file), bootstrap);
-						if (newJavaMods != null)
-							javaMods.addAll(newJavaMods);
+						javaMods.addAll(loadJavaMod(new JarFile(file), bootstrap));
 					}
 					catch (IOException error) {
 						Log.warn("I/O error while opening JAR File " + file.getAbsolutePath() + ", skipping.");
@@ -166,7 +166,6 @@ public class Loader {
 					}
 				}
 
-		Loader.javaMods = javaMods;
 		return javaMods;
 	}
 

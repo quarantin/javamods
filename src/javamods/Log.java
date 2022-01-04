@@ -27,9 +27,12 @@ public class Log {
 
 	private static void log(String type, String message) {
 
+		String date = dateFormat.format(calendar.getTime());
+		String msg = type + "\t" + date + "\t" + message;
+
+		System.out.println(msg);
 		if (out != null) {
-			String date = dateFormat.format(calendar.getTime());
-			out.println(type + "\t" + date + "\t" + message);
+			out.println(msg);
 			out.flush();
 		}
 	}
@@ -52,6 +55,7 @@ public class Log {
 	}
 
 	public static void error(Throwable throwable) {
+		throwable.printStackTrace();
 		if (out != null) {
 			out.println("\n=== STACK TRACE ===\n");
 			throwable.printStackTrace(out);
