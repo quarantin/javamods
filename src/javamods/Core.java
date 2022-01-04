@@ -56,7 +56,7 @@ public class Core {
 			Field envField = LuaManager.class.getDeclaredField("env");
 			env = (KahluaTable)envField.get(null);
 
-			new Exposer(new KahluaConverterManager(), new J2SEPlatform(), env).exposeJavaMods();
+			new Exposer(new KahluaConverterManager(), new J2SEPlatform(), env).exposeJavaMods(Loader.loadJavaMods());
 		}
 		catch (Exception error) {
 			Log.error(error);

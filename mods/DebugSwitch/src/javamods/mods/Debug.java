@@ -5,11 +5,11 @@ import java.util.List;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
-import javamods.mod.GlobalFunctionJavaMod;
+import javamods.mod.JavaModGlobalFunction;
 import zombie.core.Core;
 
 
-public class Debug extends GlobalFunctionJavaMod {
+public class Debug extends JavaModGlobalFunction {
 
 	@Override
 	public List<Object> getObjectsWithGlobalFunctions() {
