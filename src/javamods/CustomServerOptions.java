@@ -1,4 +1,4 @@
-package zombie.javamods;
+package javamods;
 
 import zombie.network.ServerOptions;
 

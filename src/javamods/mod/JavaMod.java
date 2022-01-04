@@ -1,4 +1,4 @@
-package zombie.javamods.mod;
+package javamods.mod;
 
 
 public abstract class JavaMod implements JavaModInterface {

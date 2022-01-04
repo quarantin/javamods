@@ -1,11 +1,11 @@
-package zombie.javamods.mods;
+package javamods.mods;
 
 import java.util.Arrays;
 import java.util.List;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
-import zombie.javamods.mod.GlobalFunctionJavaMod;
+import javamods.mod.GlobalFunctionJavaMod;
 import zombie.core.Core;
 
 

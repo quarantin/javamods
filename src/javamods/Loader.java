@@ -1,4 +1,4 @@
-package zombie.javamods;
+package javamods;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.jar.JarFile;
 
-import zombie.javamods.mod.JavaMod;
+import javamods.mod.JavaMod;
 
 
 public class Loader {

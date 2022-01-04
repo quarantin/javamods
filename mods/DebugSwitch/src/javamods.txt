@@ -1,1 +1,1 @@
-zombie.example.Debug
+example.Debug

@@ -5,8 +5,8 @@ ZOMBOIDSERVER  := $(HOME)/.steam/steam/steamapps/common/Project Zomboid Dedicate
 WARNINGS := -Xlint:deprecation -Xlint:unchecked
 
 build:
-	javac --release 8 -cp "$(ZOMBOID)" $(WARNINGS) zombie/javamods/*.java zombie/javamods/mod/*.java && \
-	jar -cf "$(JAR)" zombie/javamods/*.class zombie/javamods/mod/*.class
+	javac --release 8 -cp "$(ZOMBOID)" $(WARNINGS) javamods/*.java javamods/mod/*.java && \
+	jar -cf "$(JAR)" javamods/*.class javamods/mod/*.class
 
 install: build
 	cp $(JAR) $(ZOMBOID) && \
@@ -23,7 +23,7 @@ debug: install
 	cd $(ZOMBOID) && ./$(SCRIPT) -debug
 
 bootstrap: install
-	java -cp $(ZOMBOID)/javamods.jar zombie.javamods.Main -bootstrap
+	java -cp $(ZOMBOID)/javamods.jar javamods.Main -bootstrap
 
 clean:
-	rm -f *.jar zombie/javamods/*.class
+	rm -f *.jar javamods/*.class

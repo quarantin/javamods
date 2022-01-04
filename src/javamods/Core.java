@@ -1,4 +1,4 @@
-package zombie.javamods;
+package javamods;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

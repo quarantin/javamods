@@ -4,8 +4,8 @@ JAVAMODS := ../lib/javamods.jar
 JAR      := $(NAME).jar
 
 build:
-	javac -cp "$(ZOMBOID):$(JAVAMODS)" zombie/javamods/mods/*.java && \
-	jar -cf "$(JAR)" javamods.txt zombie/javamods/mods/*.class
+	javac -cp "$(ZOMBOID):$(JAVAMODS)" javamods/mods/*.java && \
+	jar -cf "$(JAR)" javamods.txt javamods/mods/*.class
 
 clean:
-	rm -f *.jar zombie/javamods/mods/*.class
+	rm -f *.jar javamods/mods/*.class

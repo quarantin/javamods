@@ -1,4 +1,4 @@
-package zombie.javamods;
+package javamods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import se.krka.kahlua.integration.expose.LuaJavaClassExposer;
 import se.krka.kahlua.vm.KahluaTable;
 import se.krka.kahlua.vm.Platform;
 
-import zombie.javamods.mod.JavaMod;
+import javamods.mod.JavaMod;
 
 
 public class Exposer extends LuaJavaClassExposer {

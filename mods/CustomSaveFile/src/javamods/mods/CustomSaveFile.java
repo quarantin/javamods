@@ -1,4 +1,4 @@
-package zombie.javamods.mods;
+package javamods.mods;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,9 +13,9 @@ import java.util.List;
 
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
-import zombie.javamods.Log;
-import zombie.javamods.Filesystem;
-import zombie.javamods.mod.JavaMod;
+import javamods.Log;
+import javamods.Filesystem;
+import javamods.mod.JavaMod;
 
 
 public class CustomSaveFile extends JavaMod {

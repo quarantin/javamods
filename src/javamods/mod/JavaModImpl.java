@@ -1,4 +1,4 @@
-package zombie.javamods.mod;
+package javamods.mod;
 
 import java.util.ArrayList;
 import java.util.List;
