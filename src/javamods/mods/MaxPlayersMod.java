@@ -12,18 +12,21 @@ public class MaxPlayersMod extends JavaMod {
 	@Override
 	public List<Patch> getPatches() {
 
-		Patch constructorPatch = new Patch(
+		Patch initPatch = new Patch(
 			"zombie.network.ServerOptions",
-			"ServerOptions",
-			"javamods.Log.debug(\"Inside ServerOptions.ServerOptions!\");" +
-			"this.MaxPlayers = new ServerOptions.IntegerServerOption(this, \"MaxPlayers\", 1, 64, 16);");
+			"init",
+			"int index = this.options.indexOf(this.MaxPlayers);" +
+			"this.options.remove(this.MaxPlayers);" +
+			"this.optionByName.remove(this.MaxPlayers.asConfigOption().getName());" +
+			"this.MaxPlayers = new zombie.network.ServerOptions.IntegerServerOption(this, \"MaxPlayers\", 1, 64, 16);" +
+			"Object option = this.options.remove(this.options.size() - 1);" +
+			"this.options.add(index, option);");
 
-		Patch methodPatch = new Patch(
+		Patch getMaxPlayersPatch = new Patch(
 			"zombie.network.ServerOptions",
 			"getMaxPlayers",
-			"javamods.Log.debug(\"Inside ServerOptions.getMaxPlayers!\");" +
 			"return Math.min(64, getInstance().MaxPlayers.getValue());");
 
-		return Arrays.asList(constructorPatch, methodPatch);
+		return Arrays.asList(initPatch, getMaxPlayersPatch);
 	}
 }
