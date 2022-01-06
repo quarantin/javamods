@@ -20,6 +20,8 @@ public class Core {
 	public static void init() {
 
 		try {
+			Log.info("javamods.Core.init()");
+
 			Field envField = LuaManager.class.getDeclaredField("env");
 			KahluaTable env = (KahluaTable)envField.get(null);;
 
