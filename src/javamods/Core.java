@@ -8,14 +8,15 @@ import se.krka.kahlua.j2se.J2SEPlatform;
 import se.krka.kahlua.vm.KahluaTable;
 
 import zombie.Lua.LuaManager;
-import zombie.gameStates.MainScreenState;
-import zombie.network.GameServer;
 
 
 public class Core {
 
-	public static boolean debug = false;
 	public static boolean server = true;
+
+	public static boolean doDebug() {
+		return zombie.core.Core.bDebug;
+	}
 
 	public static void init() {
 
