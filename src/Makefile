@@ -7,7 +7,7 @@ WARNINGS  := -Xlint:deprecation -Xlint:unchecked
 JAVASSIST := ../libs/javassist.jar
 
 build:
-	javac --release 8 -Xlint:all -cp "$(ZOMBOID):$(JAVASSIST)" $(WARNINGS) javamods/*.java javamods/mods/*.java && \
+	javac --release 15 -Xlint:all -cp "$(ZOMBOID):$(JAVASSIST)" $(WARNINGS) javamods/*.java javamods/mods/*.java && \
 	jar -cfm "$(JARPATH)" MANIFEST.MF javamods/*.class javamods/mods/*.class
 
 install: build
