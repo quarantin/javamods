@@ -58,7 +58,7 @@ installzserver:
 	mv "$(ZSERVER)/$(JARNAME)" "$(ZSERVER)/$(AGENTJAR)" "$(ZSERVER)/java" && \
 	rm -f "$(ZSERVER)/$(NAME).$(EXT)"
 
-install: bundle installzomboid installzserver
+install: clean bundle installzomboid installzserver
 
 uninstallzomboid:
 	[ -d "$(ZOMBOID)" ] && rm -f "$(ZOMBOID)/$(NAME).$(EXT)" "$(ZOMBOID)/$(JARNAME)"
