@@ -15,12 +15,14 @@ public class MaxPlayersMod extends JavaMod {
 		Patch constructorPatch = new Patch(
 			"zombie.network.ServerOptions",
 			"ServerOptions",
-			"System.out.println(\"inside ServerOptions.ServerOptions!\"); this.MaxPlayers = new ServerOptions.IntegerServerOption(this, \"MaxPlayers\", 1, 64, 16);");
+			"javamods.Log.debug(\"Inside ServerOptions.ServerOptions!\");" +
+			"this.MaxPlayers = new ServerOptions.IntegerServerOption(this, \"MaxPlayers\", 1, 64, 16);");
 
 		Patch methodPatch = new Patch(
 			"zombie.network.ServerOptions",
 			"getMaxPlayers",
-			"System.out.println(\"inside ServerOptions.getMaxPlayers!\"); return Math.min(64, getInstance().MaxPlayers.getValue());");
+			"javamods.Log.debug(\"Inside ServerOptions.getMaxPlayers!\");" +
+			"return Math.min(64, getInstance().MaxPlayers.getValue());");
 
 		return Arrays.asList(constructorPatch, methodPatch);
 	}
