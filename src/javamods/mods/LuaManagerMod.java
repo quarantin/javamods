@@ -11,8 +11,13 @@ public class LuaManagerMod extends JavaMod {
 
 	@Override
 	public List<Patch> getPatches() {
-		Patch initPatch = new Patch("zombie.Lua.LuaManager", "init", "javamods.Core.init();", true);
-		initPatch.addImport("javamods.Core");
+
+		Patch initPatch = new Patch(
+			"zombie.Lua.LuaManager",
+			"init",
+			"javamods.Core.init();",
+			true);
+
 		return Arrays.asList(initPatch);
 	}
 }
