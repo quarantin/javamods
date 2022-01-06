@@ -38,10 +38,6 @@ public class Patcher implements ClassFileTransformer {
 
 			try {
 				ClassPool classPool = ClassPool.getDefault();
-
-				for (String pkg : patch.getImports())
-					classPool.importPackage(pkg);
-
 				CtClass cc = classPool.get(patch.getTargetClass());
 				CtMethod method = cc.getDeclaredMethod(patch.getTargetMethod());
 
