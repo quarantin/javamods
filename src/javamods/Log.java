@@ -38,7 +38,7 @@ public class Log {
 	}
 
 	public static void debug(String message) {
-		if (Core.debug)
+		if (Core.doDebug())
 			log("DEBUG  ", message);
 	}
 
