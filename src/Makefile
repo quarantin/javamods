@@ -4,7 +4,7 @@ SCRIPT    := javamods.sh
 ZOMBOID   := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid/
 PZSERVER  := $(HOME)/.steam/steam/steamapps/common/Project Zomboid Dedicated Server/
 WARNINGS  := -Xlint:deprecation -Xlint:unchecked
-JAVASSIST := ../libs/javassist.jar
+JAVASSIST := ../lib/javassist.jar
 
 build:
 	javac --release 15 -Xlint:all -cp "$(ZOMBOID):$(JAVASSIST)" $(WARNINGS) javamods/*.java javamods/mods/*.java && \

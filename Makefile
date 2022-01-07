@@ -5,7 +5,7 @@ BUILD    := build
 JARNAME  := $(NAME).jar
 JARFILE  := ./$(JARNAME)
 AGENTJAR := javassist.jar
-AGENT    := ./libs/$(AGENTJAR)
+AGENT    := ./lib/$(AGENTJAR)
 
 ifeq ($(OS), Windows_NT)
 
