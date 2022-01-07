@@ -16,9 +16,6 @@ import java.util.jar.JarFile;
 
 import javamods.JavaMod;
 
-import javamods.mods.LuaManagerMod;
-import javamods.mods.MaxPlayersMod;
-
 
 public class Loader {
 
@@ -147,9 +144,6 @@ public class Loader {
 			return javaMods;
 
 		javaMods = new ArrayList<>();
-
-		javaMods.add(new LuaManagerMod());
-		javaMods.add(new MaxPlayersMod());
 
 		for (File modFolder : Filesystem.getMods())
 			for (String fileName : modFolder.list())

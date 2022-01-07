@@ -8,8 +8,6 @@ import java.util.List;
 import javamods.Patch;
 import javamods.JavaMod;
 
-import javamods.mods.LuaManagerMod;
-
 
 public class Agent {
 

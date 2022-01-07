@@ -7,7 +7,7 @@ import javamods.JavaMod;
 import javamods.Patch;
 
 
-public class LuaManagerMod extends JavaMod {
+public class LuaExposerMod extends JavaMod {
 
 	@Override
 	public List<Patch> getPatches() {
