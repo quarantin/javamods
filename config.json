@@ -1,0 +1,95 @@
+{
+	"mods": [
+		{
+			"name": "AntiCheatMod",
+			"description": "A set of patches to prevent some cheat attempts.",
+			"enabled": true,
+			"paches": [
+				{
+					"name": "teleportPatch",
+					"description": "Prevent teleport hack.",
+					"enabled": true
+				},
+				{
+					"name": "adminPatch",
+					"description": "Prevent admin hack.",
+					"enabled": true
+				},
+				{
+					"name": "removeItemPatch",
+					"description": "Prevent remove item hack.",
+					"enabled": true
+				},
+				{
+					"name": "addItemPatch",
+					"description": "Prevent add item hack.",
+					"enabled": true
+				},
+				{
+					"name": "reqItemPatch",
+					"description": "Prevent request item hack.",
+					"enabled": true
+				},
+				{
+					"name": "requestInventoryPatch",
+					"description": "Prevent request inventory hack.",
+					"enabled": true
+				},
+				{
+					"name": "executeQueryPatch",
+					"description": "Disable execute query for everyone.",
+					"enabled": true
+				},
+				{
+					"name": "hitPlayerPatch",
+					"description": "Prevent hit player hack.",
+					"enabled": true
+				},
+				{
+					"name": "killPlayerPatch",
+					"description": "Prevent kill player hack.",
+					"enabled": true
+				},
+				{
+					"name": "damagePlayerPatch",
+					"description": "Prevent damage player hack.",
+					"enabled": true
+				}
+			]
+		},
+		{
+			"name": "LuaExposerMod",
+			"description": "Allow exposing of arbitrary classes and global functions to Lua.",
+			"enabled": true,
+			"parameters": {
+			},
+			"patches": [
+				{
+					"name": "exposerPatch",
+					"description": "",
+					"enabled": true
+				}
+			]
+		},
+		{
+			"name": "MaxPlayersMod",
+			"description": "Allow bigger values for MaxPlayers.",
+			"enabled": true,
+			"parameters": {
+				"MaxPlayers": 64
+			},
+			"patches": [
+				{
+					"name": "initOptionsPatch",
+					"description": "Patch method ServerOptions.init() to redefine MaxPlayers.",
+					"enabled": true
+				},
+				{
+					"name": "getMaxPlayerPatch",
+					"description": "Patch ServerOptions.getMaxPlayers() to redefine MaxPlayers.",
+					"enabled": true
+				}
+			]
+		}
+	]
+}
