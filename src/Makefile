@@ -7,8 +7,8 @@ WARNINGS  := -Xlint:deprecation -Xlint:unchecked
 JAVASSIST := ../lib/javassist.jar
 
 build:
-	javac --release 15 -Xlint:all -cp "$(ZOMBOID):$(JAVASSIST)" $(WARNINGS) javamods/*.java javamods/mods/*.java && \
-	jar -cfm "$(JARPATH)" MANIFEST.MF javamods/*.class javamods/mods/*.class
+	javac --release 15 -Xlint:all -cp "$(ZOMBOID):$(JAVASSIST)" $(WARNINGS) javamods/*.java javamods/mods/*.java org/json/*.java && \
+	jar -cfm "$(JARPATH)" MANIFEST.MF javamods/*.class javamods/mods/*.class org/json/*.class
 
 install: build
 	cp $(JARPATH) $(ZOMBOID) && \
@@ -28,4 +28,4 @@ bootstrap: install
 	java -cp $(ZOMBOID)/javamods.jar javamods.Main -bootstrap
 
 clean:
-	rm -f "$(JARPATH)" javamods/*.class javamods/mods/*.class
+	rm -f "$(JARPATH)" javamods/*.class javamods/mods/*.class org/json/*.class
