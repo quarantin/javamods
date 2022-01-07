@@ -12,7 +12,7 @@ public class MaxPlayersMod extends JavaMod {
 	@Override
 	public List<Patch> getPatches() {
 
-		Patch initPatch = new Patch(
+		Patch initOptionsPatch = new Patch(
 			"zombie.network.ServerOptions",
 			"init",
 			"int index = this.options.indexOf(this.MaxPlayers);" +
@@ -27,6 +27,6 @@ public class MaxPlayersMod extends JavaMod {
 			"getMaxPlayers",
 			"return Math.min(64, getInstance().MaxPlayers.getValue());");
 
-		return Arrays.asList(initPatch, getMaxPlayersPatch);
+		return Arrays.asList(initOptionsPatch, getMaxPlayersPatch);
 	}
 }
