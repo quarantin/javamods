@@ -12,12 +12,12 @@ public class LuaExposerMod extends JavaMod {
 	@Override
 	public List<Patch> getPatches() {
 
-		Patch initPatch = new Patch(
+		Patch exposerPatch = new Patch(
 			"zombie.Lua.LuaManager",
 			"init",
 			"javamods.Core.init();",
 			true);
 
-		return Arrays.asList(initPatch);
+		return Arrays.asList(exposerPatch);
 	}
 }
