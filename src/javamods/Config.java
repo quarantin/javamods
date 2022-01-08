@@ -38,11 +38,11 @@ public class Config {
 		writer.close();
 	}
 
-	public static JSONObject parseConfig(File configFile) throws IOException {
+	private static JSONObject parseConfig(File configFile) throws IOException {
 		return new JSONObject(readFile(configFile));
 	}
 
-	public static File getConfigFile() {
+	private static File getConfigFile() {
 		File homeDir = new File(System.getProperty("user.home"));
 		File javamodsDir = new File(homeDir, JAVAMODS);
 		javamodsDir.mkdirs();
