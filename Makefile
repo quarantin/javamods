@@ -1,49 +1,40 @@
-NAME     := javamods
+LIB          := lib
+SRC          := src
+DIST         := dist
+BUILD        := build
+JAVABUILD    := $(BUILD)/java
+SCRIPTS      := scripts
+JAVAMODS     := javamods
+JAVAMODSJAR  := $(JAVAMODS).jar
+JAVAMODSPATH := $(SRC)/$(JAVAMODSJAR)
+JAVASSIST    := javassist
+JAVASSISTJAR := $(JAVASSIST).jar
+SCRIPTNAME   := $(JAVAMODS)-start-server.sh
+SCRIPTPATH   := $(SCRIPTS)/$(SCRIPTNAME)
+BUNDLE       := $(DIST)/$(JAVAMODS).zip
+TARGET       := $(DIST)/$(JAVAMODS)
 
-DIST     := dist
-BUILD    := build
-JARNAME  := $(NAME).jar
-JARFILE  := ./$(JARNAME)
-AGENTJAR := javassist.jar
-AGENT    := ./lib/$(AGENTJAR)
-
-ifeq ($(OS), Windows_NT)
-
-EXT      := bat
-OSNAME   := windows
-ZOMBOID  := TODO
-ZSERVER  := TODO
-
-else
-
-EXT      := sh
-OSNAME   := linux
-ZOMBOID  := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid
-ZSERVER  := $(HOME)/pzserver
-
-endif
-
-LAUNCHER := $(NAME)-$(OSNAME).$(EXT)
-BUNDLE   := $(DIST)/$(NAME)-$(OSNAME).zip
-SCRIPT   := scripts/$(LAUNCHER)
-SERVER   := scripts/$(NAME)-$(OSNAME)-server.$(EXT)
-TARGET   := $(DIST)/javamods
+ZOMBOID      := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid
+PZSERVER     := $(HOME)/pzserver
 
 all: bundle
 
 bundle: build
 	mkdir -p $(DIST)
-	cd $(BUILD)/$(OSNAME) && zip ../../$(BUNDLE) *
+	cd $(BUILD) && zip -r ../$(BUNDLE) *
 
-build: buildjar
-	mkdir -p      $(BUILD)/$(OSNAME) && \
-	cp $(AGENT)   $(BUILD)/$(OSNAME) && \
-	cp $(JARFILE) $(BUILD)/$(OSNAME) && \
-	cp $(SCRIPT)  $(BUILD)/$(OSNAME)/$(NAME).$(EXT) && \
-	cp $(SERVER)  $(BUILD)/$(OSNAME)/$(NAME)-start-server.$(EXT)
+build: buildjar updatejar
+	mkdir -p           $(JAVABUILD) && \
+	cp $(JAVAMODSPATH) $(JAVABUILD) && \
+	cp $(SCRIPTPATH)   $(BUILD)
 
 buildjar:
 	$(MAKE) -C src build
+
+updatejar:
+	cd $(LIB) && \
+	unzip -o $(JAVASSISTJAR) "$(JAVASSIST)/*" && \
+	jar uf ../$(JAVAMODSPATH) */*.class */*/*.class */*/*/*.class
 
 clean:
 	rm -rf $(BUILD) $(DIST)
@@ -51,19 +42,18 @@ clean:
 
 installzomboid:
 	[ -d "$(ZOMBOID)" ] && unzip -o -d "$(ZOMBOID)" "$(BUNDLE)" && \
-	rm -f "$(ZOMBOID)/$(SERVER)"
+	rm -f "$(ZOMBOID)/$(SCRIPTNAME)"
 
 installzserver:
-	[ -d "$(ZSERVER)" ] && unzip -o -d "$(ZSERVER)" "$(BUNDLE)"        && \
-	mv "$(ZSERVER)/$(JARNAME)" "$(ZSERVER)/$(AGENTJAR)" "$(ZSERVER)/java" && \
-	rm -f "$(ZSERVER)/$(NAME).$(EXT)"
+	[ -d "$(PZSERVER)" ] && unzip -o -d "$(PZSERVER)" "$(BUNDLE)" && \
+	mv "$(PZSERVER)/$(JAVAMODSJAR)" "$(PZSERVER)/java"
 
 install: clean bundle installzomboid installzserver
 
 uninstallzomboid:
-	[ -d "$(ZOMBOID)" ] && rm -f "$(ZOMBOID)/$(NAME).$(EXT)" "$(ZOMBOID)/$(JARNAME)"
+	[ -d "$(ZOMBOID)" ] && rm -f "$(ZOMBOID)/$(SCRIPTNAME)" "$(ZOMBOID)/$(JAVAMODSJAR)"
 
 uninstallzserver:
-	[ -d "$(ZSERVER)" ] && rm -f "$(ZSERVER)/$(NAME)-start-server.$(EXT)" "$(ZSERVER)/java/$(JARNAME)" "$(ZSERVER)/ProjectJomboid64"*
+	[ -d "$(PZSERVER)" ] && rm -f "$(PZSERVER)/$(SCRIPTNAME)" "$(PZSERVER)/java/$(JAVAMODSJAR)" "$(PZSERVER)/ProjectJomboid64"*
 
 uninstall: clean uninstallzomboid uninstallzserver
