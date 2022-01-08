@@ -11,9 +11,9 @@ JAVASSIST    := javassist
 JAVASSISTJAR := $(JAVASSIST).jar
 SCRIPTNAME   := $(JAVAMODS)-start-server.sh
 SCRIPTPATH   := $(SCRIPTS)/$(SCRIPTNAME)
-BUNDLE       := $(DIST)/$(JAVAMODS).zip
+VERSION      := $(shell git tag -l | tail -n 1)
+BUNDLE       := $(DIST)/$(JAVAMODS)-$(VERSION).zip
 TARGET       := $(DIST)/$(JAVAMODS)
-
 ZOMBOID      := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid
 PZSERVER     := $(HOME)/pzserver
 
