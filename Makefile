@@ -33,7 +33,7 @@ buildjar:
 
 updatejar:
 	cd $(LIB) && \
-	unzip -o $(JAVASSISTJAR) "$(JAVASSIST)/*" && \
+	unzip -o -qq $(JAVASSISTJAR) "$(JAVASSIST)/*" && \
 	jar uf ../$(JAVAMODSPATH) */*.class */*/*.class */*/*/*.class
 
 clean:
