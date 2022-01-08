@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.jar.JarFile;
 
 import javamods.JavaMod;
+import javamods.mods.AntiCheatMod;
+import javamods.mods.MaxPlayersMod;
 
 
 public class Loader {
@@ -144,6 +146,9 @@ public class Loader {
 			return javaMods;
 
 		javaMods = new ArrayList<>();
+
+		javaMods.add(new AntiCheatMod());
+		javaMods.add(new MaxPlayersMod());
 
 		for (File modFolder : Filesystem.getMods())
 			for (String fileName : modFolder.list())
