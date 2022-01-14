@@ -4,7 +4,8 @@ WARNINGS  := -Xlint:all
 SOURCES   := */*.java */*/*.java
 CLASSES   := */*.class */*/*.class
 JAVASSIST := ../lib/javassist.jar
-ZOMBOID   := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid/
+#ZOMBOID   := $(HOME)/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid/
+ZOMBOID   := $(HOME)/pzserver/java
 
 build: clean
 	javac --release 15 $(WARNINGS) -cp $(ZOMBOID):$(JAVASSIST) $(SOURCES) && \
