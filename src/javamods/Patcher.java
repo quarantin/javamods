@@ -69,6 +69,7 @@ public class Patcher implements ClassFileTransformer {
 
 		for (Patch patch : patches) {
 
+			Log.info("Applying patch " + patch);
 			String targetClass = patch.getTargetClass();
 			String targetMethod = patch.getTargetMethod();
 
