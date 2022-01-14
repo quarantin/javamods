@@ -110,7 +110,7 @@ public class AntiCheatMod extends JavaMod {
 		Patch hitPlayerPatch = new Patch(
 			"zombie.network.GameServer",
 			"receiveHitCharacter",
-			"if (!ServerOptions.instance.PVP.getValue()) {" +
+			"if (!zombie.network.ServerOptions.instance.PVP.getValue()) {" +
 			"	byte packetType = $1.get();" +
 			"	$1.rewind();" +
 			"	if (packetType == zombie.network.packets.hit.HitCharacterPacket.HitType.PlayerHitPlayer.ordinal()) {" +
@@ -124,9 +124,9 @@ public class AntiCheatMod extends JavaMod {
 			"zombie.network.GameServer",
 			"receivePlayerDeath",
 			"if (!javamods.mods.AntiCheatMod.isStaff($2)) {" +
-			"	short playerID = $1.getShort();" +
+			"	Short playerID = new Short($1.getShort());" +
 			"	$1.rewind();" +
-			"	IsoPlayer player = GameServer.IDToPlayerMap.get(playerID);" +
+			"	zombie.characters.IsoPlayer player = zombie.network.GameServer.IDToPlayerMap.get(playerID);" +
 			"	if (player != null && !$2.username.equals(player.username)) {" +
 			"		javamods.mods.AntiCheatMod.kickPlayer($2, \"Kill hack detected!\");" +
 			"		return;" +
@@ -138,9 +138,9 @@ public class AntiCheatMod extends JavaMod {
 			"zombie.network.GameServer",
 			"receivePlayerDamage",
 			"if (!javamods.mods.AntiCheatMod.isStaff($2)) {" +
-			"	short playerID = $1.getShort();" +
+			"	Short playerID = new Short($1.getShort());" +
 			"	$1.rewind();" +
-			"	IsoPlayer player = GameServer.IDToPlayerMap.get(playerID);" +
+			"	zombie.characters.IsoPlayer player = zombie.network.GameServer.IDToPlayerMap.get(playerID);" +
 			"	if (player != null && !$2.username.equals(player.username)) {" +
 			"		javamods.mods.AntiCheatMod.kickPlayer($2, \"Damage hack detected!\");" +
 			"		return;" +
@@ -155,7 +155,7 @@ public class AntiCheatMod extends JavaMod {
 				addItemPatch,
 				reqItemPatch,
 				requestInventoryPatch,
-				executeQueryPatch,
+				//executeQueryPatch,
 				hitPlayerPatch,
 				killPlayerPatch,
 				damagePlayerPatch
