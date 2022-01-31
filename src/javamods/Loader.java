@@ -147,7 +147,7 @@ public class Loader {
 
 		javaMods = new ArrayList<>();
 
-		javaMods.add(new AntiCheatMod());
+		//javaMods.add(new AntiCheatMod());
 		javaMods.add(new MaxPlayersMod());
 
 		for (File modFolder : Filesystem.getMods())
